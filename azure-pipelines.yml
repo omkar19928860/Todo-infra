@@ -1,11 +1,11 @@
-pool: devpool
+
 
 trigger: none 
+pool: devpool
 
 stages:
 - stage: PreCommit
   displayName: Pre-Commit / Static Analysis Stage
-  pool: Default
   jobs: 
   - job: TerraformValidate
     displayName: Terraform Validate
