@@ -70,10 +70,26 @@ stages:
     displayName: InfraCost
     steps:
     - task: PowerShell@2
+      displayName: Install Infracost
       inputs:
-        targetType: 'inline'
-        script: 'infracost breakdown --path=.'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+       targetType: inline
+       script: |
+       $version = "0.10.35"
+       Invoke-WebRequest `
+        -Uri "https://github.com/infracost/infracost/releases/download/v$version/infracost-windows-amd64.zip" `
+        -OutFile infracost.zip
+
+        Expand-Archive infracost.zip -DestinationPath infracost-bin -Force
+        Move-Item infracost-bin\infracost.exe $env:USERPROFILE\infracost.exe
+
+          echo "##vso[task.prependpath]$env:USERPROFILE"
+      
+
+    - task: PowerShell@2
+      inputs:
+      targetType: 'inline'
+       script: 'infracost breakdown --path=.'
+       workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
 
 - stage: plan
   displayName: Plan & Review Stage
