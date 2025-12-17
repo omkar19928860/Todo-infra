@@ -177,7 +177,7 @@ stages:
         targetType: 'inline'
         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
         script: |
-          infracost breakdown --path=plan.json --format=table
+          infracost breakdown --path=plan.json --path-type=terraform-plan --format=table
           
       env:
         INFRACOST_API_KEY: "ico-Kvvjcyg51sMx939hESbDvyOWLct5FBmd"
