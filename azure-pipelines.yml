@@ -62,36 +62,36 @@ stages:
         errorActionPreference: 'continue'        
         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
 
-- stage: costStage
-  dependsOn: PreCommit
-  displayName: Cost & Impact Assessment Stage
-  jobs: 
-  - job: InfraCost
-    displayName: InfraCost
-    steps:
-    - task: PowerShell@2
-      displayName: Install Infracost
-      inputs:
-        targetType: 'inline'
-        script: |
-          $version = "0.10.35"
-                  Invoke-WebRequest `
-                  -Uri "https://github.com/infracost/infracost/releases/download/v$version/infracost-windows-amd64.zip" `
-                  -OutFile infracost.zip
+# - stage: costStage
+#   dependsOn: PreCommit
+#   displayName: Cost & Impact Assessment Stage
+#   jobs: 
+#   - job: InfraCost
+#     displayName: InfraCost
+#     steps:
+#     - task: PowerShell@2
+#       displayName: Install Infracost
+#       inputs:
+#         targetType: 'inline'
+#         script: |
+#           $version = "0.10.35"
+#                   Invoke-WebRequest `
+#                   -Uri "https://github.com/infracost/infracost/releases/download/v$version/infracost-windows-amd64.zip" `
+#                   -OutFile infracost.zip
           
-                  Expand-Archive infracost.zip -DestinationPath infracost-bin -Force
-                  Move-Item infracost-bin\infracost.exe $env:USERPROFILE\infracost.exe -Force
+#                   Expand-Archive infracost.zip -DestinationPath infracost-bin -Force
+#                   Move-Item infracost-bin\infracost.exe $env:USERPROFILE\infracost.exe -Force
           
-                    echo "##vso[task.prependpath]$env:USERPROFILE"
+#                     echo "##vso[task.prependpath]$env:USERPROFILE"
       
 
-    - task: PowerShell@2
-      inputs:
-       targetType: 'inline'
-       script: 'infracost breakdown --path=.'
-       workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
-      env:
-       INFRACOST_API_KEY: "ico-Kvvjcyg51sMx939hESbDvyOWLct5FBmd"
+#     - task: PowerShell@2
+#       inputs:
+#        targetType: 'inline'
+#        script: 'infracost breakdown --path=.'
+#        workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+#       env:
+#        INFRACOST_API_KEY: "ico-Kvvjcyg51sMx939hESbDvyOWLct5FBmd"
 - stage: plan
   displayName: Plan & Review Stage
   jobs: 
@@ -113,6 +113,45 @@ stages:
         command: 'plan'
         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
         environmentServiceNameAzureRM: 'sc-azure-dev'
+- stage: costStage
+  dependsOn: plan
+  displayName: Cost & Impact Assessment Stage
+  jobs:
+  - job: InfraCost
+    displayName: InfraCost
+    steps:
+
+    - task: PowerShell@2
+      displayName: Install Infracost
+      inputs:
+        targetType: 'inline'
+        script: |
+          $version = "0.10.35"
+          Invoke-WebRequest `
+            -Uri "https://github.com/infracost/infracost/releases/download/v$version/infracost-windows-amd64.zip" `
+            -OutFile infracost.zip
+          Expand-Archive infracost.zip -DestinationPath infracost-bin -Force
+          Move-Item infracost-bin\infracost.exe $env:USERPROFILE\infracost.exe -Force
+          echo "##vso[task.prependpath]$env:USERPROFILE"
+
+    - task: PowerShell@2
+      displayName: Generate plan.json
+      inputs:
+        targetType: 'inline'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+        script: |
+          terraform show -json tfplan > plan.json
+
+    - task: PowerShell@2
+      displayName: Infracost Breakdown
+      inputs:
+        targetType: 'inline'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+        script: |
+          infracost breakdown --path=plan.json
+      env:
+        INFRACOST_API_KEY: "ico-Kvvjcyg51sMx939hESbDvyOWLct5FBmd"
+
 
 - stage: approval
   dependsOn: plan
