@@ -83,8 +83,6 @@ stages:
                   Move-Item infracost-bin\infracost.exe $env:USERPROFILE\infracost.exe
           
                     echo "##vso[task.prependpath]$env:USERPROFILE"
-      env:
-       INFRACOST_API_KEY: "ico-Kvvjcyg51sMx939hESbDvyOWLct5FBmd"
       
 
     - task: PowerShell@2
@@ -92,7 +90,8 @@ stages:
        targetType: 'inline'
        script: 'infracost breakdown --path=.'
        workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
-
+      env:
+       INFRACOST_API_KEY: "ico-Kvvjcyg51sMx939hESbDvyOWLct5FBmd"
 - stage: plan
   displayName: Plan & Review Stage
   jobs: 
