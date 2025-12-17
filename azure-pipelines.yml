@@ -107,12 +107,12 @@ stages:
         backendAzureRmStorageAccountName: 'omkarstor1'
         backendAzureRmContainerName: 'omkarstorc'
         backendAzureRmKey: 'dev.terraform.tfstate'
-    - task: TerraformTask@5
-      inputs:
-        provider: 'azurerm'
-        command: 'destroy'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
-        environmentServiceNameAzureRM: 'sc-azure-dev'
+    # - task: TerraformTask@5
+    #   inputs:
+    #     provider: 'azurerm'
+    #     command: 'destroy'
+    #     workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+    #     environmentServiceNameAzureRM: 'sc-azure-dev'
 
       
     - task: TerraformTask@5
@@ -177,7 +177,7 @@ stages:
         targetType: 'inline'
         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
         script: |
-          'infracost breakdown --path=plan.json
+          infracost breakdown --path=plan.json --format=table
           
       env:
         INFRACOST_API_KEY: "ico-Kvvjcyg51sMx939hESbDvyOWLct5FBmd"
