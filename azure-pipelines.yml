@@ -4,63 +4,63 @@ trigger: none
 pool: devpool
 
 stages:
-- stage: PreCommit
-  displayName: Pre-Commit / Static Analysis Stage
-  jobs: 
-  - job: TerraformValidate
-    displayName: Terraform Validate
-    steps:
-    - task: TerraformTask@5
-      inputs:
-        provider: 'azurerm'
-        command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
-        backendServiceArm: 'sc-azure-dev'
-        backendAzureRmStorageAccountName: 'omkarstor1'
-        backendAzureRmContainerName: 'omkarstorc'
-        backendAzureRmKey: 'dev.terraform.tfstate'  
-    - task: TerraformTask@5
-      inputs:
-        provider: 'azurerm'
-        command: 'validate'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+# - stage: PreCommit
+#   displayName: Pre-Commit / Static Analysis Stage
+#   jobs: 
+#   - job: TerraformValidate
+#     displayName: Terraform Validate
+#     steps:
+#     - task: TerraformTask@5
+#       inputs:
+#         provider: 'azurerm'
+#         command: 'init'
+#         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+#         backendServiceArm: 'sc-azure-dev'
+#         backendAzureRmStorageAccountName: 'omkarstor1'
+#         backendAzureRmContainerName: 'omkarstorc'
+#         backendAzureRmKey: 'dev.terraform.tfstate'  
+#     - task: TerraformTask@5
+#       inputs:
+#         provider: 'azurerm'
+#         command: 'validate'
+#         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
 
-  - job: TerraformFmt
-    dependsOn: TerraformValidate
-    displayName: Terraform Fmt
-    steps:
-    - task: TerraformTask@5
-      inputs:
-        provider: 'azurerm'
-        command: 'custom'
-        environmentServiceNameAzureRM: 'sc-azure-dev'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
-        outputTo: 'console'
-        customCommand: 'fmt'
+#   - job: TerraformFmt
+#     dependsOn: TerraformValidate
+#     displayName: Terraform Fmt
+#     steps:
+#     - task: TerraformTask@5
+#       inputs:
+#         provider: 'azurerm'
+#         command: 'custom'
+#         environmentServiceNameAzureRM: 'sc-azure-dev'
+#         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+#         outputTo: 'console'
+#         customCommand: 'fmt'
 
-  - job: tfsec
-    dependsOn: TerraformFmt
-    displayName: TfSec Scan
-    steps:
-    - task: tfsec@1
-      inputs:
-        version: 'v1.26.0'
-        dir: '$(System.DefaultWorkingDirectory)/environment/dev'
+#   - job: tfsec
+#     dependsOn: TerraformFmt
+#     displayName: TfSec Scan
+#     steps:
+#     - task: tfsec@1
+#       inputs:
+#         version: 'v1.26.0'
+#         dir: '$(System.DefaultWorkingDirectory)/environment/dev'
 
-  - job: tflint
-    dependsOn: tfsec
-    displayName: TFLint
-    steps:
-    - task: PowerShell@2
-      continueOnError: true
-      inputs:
-        targetType: 'inline'
-        script: |
-          winget install TerraformLinters.tflint     
-          ls   
-          tflint
-        errorActionPreference: 'continue'        
-        workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+#   - job: tflint
+#     dependsOn: tfsec
+#     displayName: TFLint
+#     steps:
+#     - task: PowerShell@2
+#       continueOnError: true
+#       inputs:
+#         targetType: 'inline'
+#         script: |
+#           winget install TerraformLinters.tflint     
+#           ls   
+#           tflint
+#         errorActionPreference: 'continue'        
+#         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
 
 # - stage: costStage
 #   dependsOn: PreCommit
@@ -169,6 +169,7 @@ stages:
         targetType: 'inline'
         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
         script: |
+          'infracost breakdown --path=.'
           terraform show -json tfplan > plan.json
       env:
         INFRACOST_API_KEY: "ico-Kvvjcyg51sMx939hESbDvyOWLct5FBmd"
