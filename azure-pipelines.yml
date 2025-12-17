@@ -113,6 +113,7 @@ stages:
         command: 'plan'
         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
         environmentServiceNameAzureRM: 'sc-azure-dev'
+        commandOptions: '-out=tfplan'
 - stage: costStage
   dependsOn: plan
   displayName: Cost & Impact Assessment Stage
