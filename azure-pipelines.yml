@@ -97,7 +97,6 @@ stages:
   jobs: 
   - job: TerraformPlan
     displayName: Terraform Plan
-    pool: Default
     steps: 
     - task: TerraformTask@5
       inputs:
@@ -127,26 +126,25 @@ stages:
       inputs:
         notifyUsers: 'falana@gmail.com'
 
-# - stage: apply
-#   dependsOn: approval
-#   displayName: Deploy / Apply Stage
-#   jobs:
-#   - job: TerraformApply
-#     displayName: Terraform Apply
-#     pool: Default
-#     steps:
-#     - task: TerraformTask@5
-#       inputs:
-#         provider: 'azurerm'
-#         command: 'init'
-#         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
-#         backendServiceArm: 'sc-azure-dev'
-#         backendAzureRmStorageAccountName: 'omkarstor1'
-#         backendAzureRmContainerName: 'omkarstorc'
-#         backendAzureRmKey: 'dev.terraform.tfstate' 
-#     - task: TerraformTask@5
-#       inputs:
-#         provider: 'azurerm'
-#         command: 'apply'
-#         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
-#         environmentServiceNameAzureRM: 'dev.terraform.tfstate' 
+- stage: apply
+  dependsOn: approval
+  displayName: Deploy / Apply Stage
+  jobs:
+  - job: TerraformApply
+    displayName: Terraform Apply
+    steps:
+    - task: TerraformTask@5
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+        backendServiceArm: 'sc-azure-dev'
+        backendAzureRmStorageAccountName: 'omkarstor1'
+        backendAzureRmContainerName: 'omkarstorc'
+        backendAzureRmKey: 'dev.terraform.tfstate' 
+    - task: TerraformTask@5
+      inputs:
+        provider: 'azurerm'
+        command: 'apply'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+        environmentServiceNameAzureRM: 'sc-azure-dev' 
