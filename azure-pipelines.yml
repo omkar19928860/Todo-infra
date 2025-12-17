@@ -80,7 +80,7 @@ stages:
                   -OutFile infracost.zip
           
                   Expand-Archive infracost.zip -DestinationPath infracost-bin -Force
-                  Move-Item infracost-bin\infracost.exe $env:USERPROFILE\infracost.exe
+                  Move-Item infracost-bin\infracost.exe $env:USERPROFILE\infracost.exe -Force
           
                     echo "##vso[task.prependpath]$env:USERPROFILE"
       
