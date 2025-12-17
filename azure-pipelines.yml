@@ -131,7 +131,16 @@ stages:
       inputs:
         artifact: 'tfplan'
         path: '$(System.DefaultWorkingDirectory)/environment/dev'
-
+    - task: TerraformTask@5
+      displayName: Terraform Init (Cost Stage)
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+        backendServiceArm: 'sc-azure-dev'
+        backendAzureRmStorageAccountName: 'omkarstor1'
+        backendAzureRmContainerName: 'omkarstorc'
+        backendAzureRmKey: 'dev.terraform.tfstate'
     - task: PowerShell@2
       displayName: Install Infracost
       inputs:
