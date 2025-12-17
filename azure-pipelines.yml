@@ -114,6 +114,11 @@ stages:
         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
         environmentServiceNameAzureRM: 'sc-azure-dev'
         commandOptions: '-out=tfplan'
+    - task: PublishPipelineArtifact@1
+      displayName: Publish tfplan
+      inputs:
+        targetPath: '$(System.DefaultWorkingDirectory)/environment/dev/tfplan'
+        artifact: 'tfplan'
 - stage: costStage
   dependsOn: plan
   displayName: Cost & Impact Assessment Stage
@@ -121,6 +126,11 @@ stages:
   - job: InfraCost
     displayName: InfraCost
     steps:
+    - task: DownloadPipelineArtifact@2
+      displayName: Download tfplan
+      inputs:
+        artifact: 'tfplan'
+        path: '$(System.DefaultWorkingDirectory)/environment/dev'
 
     - task: PowerShell@2
       displayName: Install Infracost
@@ -134,6 +144,7 @@ stages:
           Expand-Archive infracost.zip -DestinationPath infracost-bin -Force
           Move-Item infracost-bin\infracost.exe $env:USERPROFILE\infracost.exe -Force
           echo "##vso[task.prependpath]$env:USERPROFILE"
+
 
     - task: PowerShell@2
       displayName: Generate plan.json
@@ -149,7 +160,7 @@ stages:
         targetType: 'inline'
         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
         script: |
-          infracost breakdown --path=plan.json
+          terraform show -json tfplan > plan.json
       env:
         INFRACOST_API_KEY: "ico-Kvvjcyg51sMx939hESbDvyOWLct5FBmd"
 
