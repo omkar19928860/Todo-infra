@@ -154,7 +154,7 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          $version = "0.10.35"
+          $version = "0.10.43"
           Invoke-WebRequest `
             -Uri "https://github.com/infracost/infracost/releases/download/v$version/infracost-windows-amd64.zip" `
             -OutFile infracost.zip
