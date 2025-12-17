@@ -83,7 +83,8 @@ stages:
                   Move-Item infracost-bin\infracost.exe $env:USERPROFILE\infracost.exe
           
                     echo "##vso[task.prependpath]$env:USERPROFILE"
-       
+      env:
+       INFRACOST_API_KEY: "ico-Kvvjcyg51sMx939hESbDvyOWLct5FBmd"
       
 
     - task: PowerShell@2
