@@ -169,8 +169,8 @@ stages:
         targetType: 'inline'
         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
         script: |
-          'infracost breakdown --path=.'
-          terraform show -json tfplan > plan.json
+          'infracost breakdown --path=plan.json
+          
       env:
         INFRACOST_API_KEY: "ico-Kvvjcyg51sMx939hESbDvyOWLct5FBmd"
 
