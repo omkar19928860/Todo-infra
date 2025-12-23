@@ -1,0 +1,14 @@
+trigger: none
+pool: wiproagent
+stages:
+  - stage: print a task 
+    displayName: print hello
+    jobs:
+    - job: print  
+      steps:
+      - task: PowerShell@2
+        inputs:
+          targetType: 'inline'
+          script: 'Write-Host "Hello World"'
+
+
