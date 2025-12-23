@@ -1,5 +1,17 @@
 trigger: none
 pool: wiproagent
+parameters:
+  - name: myString
+    type: string
+    default: a string
+  - name: myMultiString
+    type: string
+    default: default
+    values:
+      - default
+      - ubuntu
+
+
 stages:
  - stage: terraforminstall
    displayName: TerraformInstall
