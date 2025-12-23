@@ -1,7 +1,7 @@
 trigger: none
 pool : testingpool
 stages:
-  - stage: terraforminit
+  - stage: terraforminstall
     displayName: install
     jobs:
       - job: install
@@ -9,4 +9,18 @@ stages:
         - task: TerraformInstaller@1
           inputs:
             terraformVersion: 'latest'
+  - stage: terraforminit
+    displayName: inint
+    jobs:
+      - job: inint
+        steps:
+        - task: TerraformTask@5
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+            backendServiceArm: 'sc-azure-dev'
+            backendAzureRmStorageAccountName: 'omkarstor1'
+            backendAzureRmContainerName: 'omkarstorc'
+            backendAzureRmKey: 'dev.terraform.state'
         
