@@ -1,5 +1,5 @@
 trigger: none
-pool : omkar2
+pool : testingpool
 stages:
   - stage: cmd
     displayName: cmd
