@@ -1,14 +1,15 @@
 trigger: none
 pool: wiproagent
 stages:
-  - stage: printhello
-    displayName: print hello
-    jobs:
-    - job: print  
-      steps:
-      - task: PowerShell@2
-        inputs:
-          targetType: 'inline'
-          script: 'Write-Host "Hello World"'
+ - stage: terraforminstall
+   displayName: TerraformInstall
+   jobs:
+   - job: install
+     steps:
+     - task: TerraformInstaller@1
+       inputs:
+         terraformVersion: 'latest'
+
+  
 
 
