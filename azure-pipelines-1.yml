@@ -1,13 +1,12 @@
 trigger: none
 pool : testingpool
 stages:
-  - stage: cmd
-    displayName: cmd
+  - stage: terraforminit
+    displayName: install
     jobs:
-      - job: om
+      - job: install
         steps:
-        - task: PowerShell@2
+        - task: TerraformInstaller@1
           inputs:
-            targetType: 'inline'
-            script: 'Write-Host "Hello World"'
+            terraformVersion: 'latest'
         
