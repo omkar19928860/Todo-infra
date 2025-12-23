@@ -1,0 +1,13 @@
+trigger: none
+pool : omkar2
+stages:
+  - stage: cmd
+    displayName: cmd
+    jobs:
+      - job: om
+        steps:
+        - task: PowerShell@2
+          inputs:
+            targetType: 'inline'
+            script: 'Write-Host "Hello World"'
+        
