@@ -1,7 +1,7 @@
 trigger: none
 pool: wiproagent
 stages:
-  - stage: print a task 
+  - stage: printhello
     displayName: print hello
     jobs:
     - job: print  
