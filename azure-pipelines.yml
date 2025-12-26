@@ -169,7 +169,7 @@ stages:
         targetType: 'inline'
         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
         script: |
-          terraform show -json tfplan > plan.json
+         infracost breakdown --path . --format table
 
     - task: PowerShell@2
       displayName: Infracost Breakdown
