@@ -107,12 +107,12 @@ stages:
         backendAzureRmStorageAccountName: 'omkarstor2'
         backendAzureRmContainerName: 'omkarstorc'
         backendAzureRmKey: 'dev.terraform.tfstate'
-    - task: TerraformTask@5
-      inputs:
-        provider: 'azurerm'
-        command: 'destroy'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
-        environmentServiceNameAzureRM: 'sc-azure-dev'
+    # - task: TerraformTask@5
+    #   inputs:
+    #     provider: 'azurerm'
+    #     command: 'destroy'
+    #     workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+    #     environmentServiceNameAzureRM: 'sc-azure-dev'
 
       
     - task: TerraformTask@5
