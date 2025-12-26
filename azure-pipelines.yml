@@ -1,7 +1,7 @@
 
 
 trigger: none 
-pool: devpool
+pool: dev
 
 stages:
 - stage: PreCommit
