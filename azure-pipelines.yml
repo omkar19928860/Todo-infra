@@ -164,20 +164,12 @@ stages:
 
 
     - task: PowerShell@2
-      displayName: Generate plan.json
-      inputs:
-        targetType: 'inline'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
-        script: |
-         infracost breakdown --path . --format table
-
-    - task: PowerShell@2
       displayName: Infracost Breakdown
       inputs:
         targetType: 'inline'
         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
         script: |
-          infracost breakdown --path=plan.json --format=table
+          infracost breakdown --path . --format table
           
       env:
         INFRACOST_API_KEY: "ico-Kvvjcyg51sMx939hESbDvyOWLct5FBmd"
