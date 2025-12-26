@@ -16,7 +16,7 @@ stages:
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
         backendServiceArm: 'omkarsc'
-        backendAzureRmStorageAccountName: 'omkarstor1'
+        backendAzureRmStorageAccountName: 'omkarstor2'
         backendAzureRmContainerName: 'omkarstorc'
         backendAzureRmKey: 'dev.terraform.tfstate'  
     - task: TerraformTask@5
@@ -104,7 +104,7 @@ stages:
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
         backendServiceArm: 'omkarsc'
-        backendAzureRmStorageAccountName: 'omkarstor1'
+        backendAzureRmStorageAccountName: 'omkarstor2'
         backendAzureRmContainerName: 'omkarstorc'
         backendAzureRmKey: 'dev.terraform.tfstate'
     - task: TerraformTask@5
@@ -146,7 +146,7 @@ stages:
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
         backendServiceArm: 'omkarsc'
-        backendAzureRmStorageAccountName: 'omkarstor1'
+        backendAzureRmStorageAccountName: 'omkarstor2'
         backendAzureRmContainerName: 'omkarstorc'
         backendAzureRmKey: 'dev.terraform.tfstate'
     - task: PowerShell@2
@@ -208,7 +208,7 @@ stages:
         command: 'init'
         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
         backendServiceArm: 'omkarsc'
-        backendAzureRmStorageAccountName: 'omkarstor1'
+        backendAzureRmStorageAccountName: 'omkarstor2'
         backendAzureRmContainerName: 'omkarstorc'
         backendAzureRmKey: 'dev.terraform.tfstate' 
     - task: TerraformTask@5
