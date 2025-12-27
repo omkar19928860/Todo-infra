@@ -3,158 +3,158 @@ trigger: none
 pool: dev
 
 stages:
-- stage: preCommitChecks
-  displayName: Infrastructure Quality & Security Checks
-  jobs: 
-  - job: TerraformValidate
-    displayName: Terraform Validate
-    steps:
-    - task: TerraformTask@5
-      displayName: init
-      inputs:
-        provider: 'azurerm'
-        command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
-        backendServiceArm: 'omkarsc'
-        backendAzureRmStorageAccountName: 'omkarstor2'
-        backendAzureRmContainerName: 'omkarstorc'
-        backendAzureRmKey: 'dev.terraform.tfstate'  
-    - task: TerraformTask@5
-      displayName: validate
-      inputs:
-        provider: 'azurerm'
-        command: 'validate'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+# - stage: preCommitChecks
+#   displayName: Infrastructure Quality & Security Checks
+#   jobs: 
+#   - job: TerraformValidate
+#     displayName: Terraform Validate
+#     steps:
+#     - task: TerraformTask@5
+#       displayName: init
+#       inputs:
+#         provider: 'azurerm'
+#         command: 'init'
+#         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+#         backendServiceArm: 'omkarsc'
+#         backendAzureRmStorageAccountName: 'omkarstor2'
+#         backendAzureRmContainerName: 'omkarstorc'
+#         backendAzureRmKey: 'dev.terraform.tfstate'  
+#     - task: TerraformTask@5
+#       displayName: validate
+#       inputs:
+#         provider: 'azurerm'
+#         command: 'validate'
+#         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
 
-  - job: TerraformFmt
-    dependsOn: TerraformValidate
-    displayName: Terraform Fmt
-    steps:
-    - task: TerraformTask@5
-      displayName: fmt
-      inputs:
-        provider: 'azurerm'
-        command: 'custom'
-        environmentServiceNameAzureRM: 'omkarsc'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
-        outputTo: 'console'
-        customCommand: 'fmt'
+#   - job: TerraformFmt
+#     dependsOn: TerraformValidate
+#     displayName: Terraform Fmt
+#     steps:
+#     - task: TerraformTask@5
+#       displayName: fmt
+#       inputs:
+#         provider: 'azurerm'
+#         command: 'custom'
+#         environmentServiceNameAzureRM: 'omkarsc'
+#         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+#         outputTo: 'console'
+#         customCommand: 'fmt'
 
-  - job: tfsec
-    dependsOn: TerraformFmt
-    displayName: TfSec Scan
-    steps:
-    - task: tfsec@1
-      inputs:
-        version: 'v1.26.0'
-        dir: '$(System.DefaultWorkingDirectory)/environment/dev'
+#   - job: tfsec
+#     dependsOn: TerraformFmt
+#     displayName: TfSec Scan
+#     steps:
+#     - task: tfsec@1
+#       inputs:
+#         version: 'v1.26.0'
+#         dir: '$(System.DefaultWorkingDirectory)/environment/dev'
 
-  - job: tflint
-    dependsOn: tfsec
-    displayName: TFLint
-    steps:
-    - task: PowerShell@2
-      continueOnError: true
-      inputs:
-        targetType: 'inline'
-        script: |
-          winget install TerraformLinters.tflint     
-          ls   
-          tflint
-        errorActionPreference: 'continue'        
-        workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+#   - job: tflint
+#     dependsOn: tfsec
+#     displayName: TFLint
+#     steps:
+#     - task: PowerShell@2
+#       continueOnError: true
+#       inputs:
+#         targetType: 'inline'
+#         script: |
+#           winget install TerraformLinters.tflint     
+#           ls   
+#           tflint
+#         errorActionPreference: 'continue'        
+#         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
 
 
-- stage: plan
-  displayName: Plan validation
-  jobs: 
-  - job: TerraformPlan
-    displayName: Terraform Plan
-    steps: 
-    - task: TerraformTask@5
-      inputs:
-        provider: 'azurerm'
-        command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
-        backendServiceArm: 'omkarsc'
-        backendAzureRmStorageAccountName: 'omkarstor2'
-        backendAzureRmContainerName: 'omkarstorc'
-        backendAzureRmKey: 'dev.terraform.tfstate'
+# - stage: plan
+#   displayName: Plan validation
+#   jobs: 
+#   - job: TerraformPlan
+#     displayName: Terraform Plan
+#     steps: 
+#     - task: TerraformTask@5
+#       inputs:
+#         provider: 'azurerm'
+#         command: 'init'
+#         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+#         backendServiceArm: 'omkarsc'
+#         backendAzureRmStorageAccountName: 'omkarstor2'
+#         backendAzureRmContainerName: 'omkarstorc'
+#         backendAzureRmKey: 'dev.terraform.tfstate'
        
-    - task: TerraformTask@5
-      inputs:
-        provider: 'azurerm'
-        command: 'plan'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
-        environmentServiceNameAzureRM: 'omkarsc'
-        commandOptions: '-out=tfplan'
-    # - task: PublishPipelineArtifact@1
-    #   displayName: Publish tfplan
-    #   inputs:
-    #     targetPath: '$(System.DefaultWorkingDirectory)/environment/dev/tfplan'
-    #     artifact: 'tfplan'
-- stage: costStage
-  dependsOn: plan
-  displayName: Finops 
-  jobs:
-  - job: InfraCost
-    displayName: InfraCost
-    steps:
-    # - task: DownloadPipelineArtifact@2
-    #   displayName: Download tfplan
-    #   inputs:
-    #     artifact: 'tfplan'
-    #     path: '$(System.DefaultWorkingDirectory)/environment/dev'
-    - task: TerraformTask@5
-      displayName: Terraform Init (Cost Stage)
-      inputs:
-        provider: 'azurerm'
-        command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
-        backendServiceArm: 'omkarsc'
-        backendAzureRmStorageAccountName: 'omkarstor2'
-        backendAzureRmContainerName: 'omkarstorc'
-        backendAzureRmKey: 'dev.terraform.tfstate'
-    - task: PowerShell@2
-      displayName: Install Infracost
-      inputs:
-        targetType: 'inline'
-        script: |
-          $version = "0.10.43"
-          Invoke-WebRequest `
-            -Uri "https://github.com/infracost/infracost/releases/download/v$version/infracost-windows-amd64.zip" `
-            -OutFile infracost.zip
-          Expand-Archive infracost.zip -DestinationPath infracost-bin -Force
-          Move-Item infracost-bin\infracost.exe $env:USERPROFILE\infracost.exe -Force
-          echo "##vso[task.prependpath]$env:USERPROFILE"
+#     - task: TerraformTask@5
+#       inputs:
+#         provider: 'azurerm'
+#         command: 'plan'
+#         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+#         environmentServiceNameAzureRM: 'omkarsc'
+#         commandOptions: '-out=tfplan'
+#     # - task: PublishPipelineArtifact@1
+#     #   displayName: Publish tfplan
+#     #   inputs:
+#     #     targetPath: '$(System.DefaultWorkingDirectory)/environment/dev/tfplan'
+#     #     artifact: 'tfplan'
+# - stage: costStage
+#   dependsOn: plan
+#   displayName: Finops 
+#   jobs:
+#   - job: InfraCost
+#     displayName: InfraCost
+#     steps:
+#     # - task: DownloadPipelineArtifact@2
+#     #   displayName: Download tfplan
+#     #   inputs:
+#     #     artifact: 'tfplan'
+#     #     path: '$(System.DefaultWorkingDirectory)/environment/dev'
+#     - task: TerraformTask@5
+#       displayName: Terraform Init (Cost Stage)
+#       inputs:
+#         provider: 'azurerm'
+#         command: 'init'
+#         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+#         backendServiceArm: 'omkarsc'
+#         backendAzureRmStorageAccountName: 'omkarstor2'
+#         backendAzureRmContainerName: 'omkarstorc'
+#         backendAzureRmKey: 'dev.terraform.tfstate'
+#     - task: PowerShell@2
+#       displayName: Install Infracost
+#       inputs:
+#         targetType: 'inline'
+#         script: |
+#           $version = "0.10.43"
+#           Invoke-WebRequest `
+#             -Uri "https://github.com/infracost/infracost/releases/download/v$version/infracost-windows-amd64.zip" `
+#             -OutFile infracost.zip
+#           Expand-Archive infracost.zip -DestinationPath infracost-bin -Force
+#           Move-Item infracost-bin\infracost.exe $env:USERPROFILE\infracost.exe -Force
+#           echo "##vso[task.prependpath]$env:USERPROFILE"
 
 
-    - task: PowerShell@2
-      displayName: Infracost Breakdown
-      inputs:
-        targetType: 'inline'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
-        script: |
-          infracost breakdown --path . --format table
+#     - task: PowerShell@2
+#       displayName: Infracost Breakdown
+#       inputs:
+#         targetType: 'inline'
+#         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+#         script: |
+#           infracost breakdown --path . --format table
           
-      env:
-        INFRACOST_API_KEY: "ico-Kvvjcyg51sMx939hESbDvyOWLct5FBmd"
+#       env:
+#         INFRACOST_API_KEY: "ico-Kvvjcyg51sMx939hESbDvyOWLct5FBmd"
 
 
-- stage: approval
-  dependsOn: plan
-  displayName: Approvalstage
-  jobs:
-  - job: ManualApproval
-    displayName: Manual Approval
-    pool: server
-    steps: 
-    - task: ManualValidation@1
-      inputs:
-        notifyUsers: 'falana@gmail.com'
+# - stage: approval
+#   dependsOn: plan
+#   displayName: Approvalstage
+#   jobs:
+#   - job: ManualApproval
+#     displayName: Manual Approval
+#     pool: server
+#     steps: 
+#     - task: ManualValidation@1
+#       inputs:
+#         notifyUsers: 'falana@gmail.com'
 
 - stage: apply
-  dependsOn: approval
+  # dependsOn: approval
   displayName: Deploy stage
   jobs:
   - job: TerraformApply
@@ -180,7 +180,17 @@ stages:
   jobs:
   - job: Terraformdestroy
     displayName: Terraform Destroy
+
     steps:
+    - task: TerraformTask@5
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+        backendServiceArm: 'omkarsc'
+        backendAzureRmStorageAccountName: 'omkarstor2'
+        backendAzureRmContainerName: 'omkarstorc'
+        backendAzureRmKey: 'dev.terraform.tfstate'
     - task: TerraformTask@5
       inputs:
         provider: 'azurerm'
