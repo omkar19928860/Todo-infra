@@ -20,7 +20,7 @@ resource_group = {
 }
 storage_account = {
   stg1 = {
-    name                             = "todostaorage00om7"
+    name                             = "todostaorage00omkjhgf7"
     resource_group_name              = "rg-todo-001"
     location                         = "central india"
     account_tier                     = "Standard"
@@ -32,7 +32,7 @@ storage_account = {
     min_tls_version                  = "TLS1_0"
   }
   stg2 = {
-    name                     = "todostaorageom8"
+    name                     = "todostaorageomkjhg8"
     resource_group_name      = "rg-todo-002"
     location                 = "central india"
     account_tier             = "Standard"
@@ -131,7 +131,7 @@ nic = {
 
 keyvault = {
   key1 = {
-    name                        = "keyvault001osslmo"
+    name                        = "keyvault001omka1"
     resource_group_name         = "rg-todo-001"
     location                    = "Central india"
     enabled_for_disk_encryption = "true"
@@ -140,7 +140,7 @@ keyvault = {
     sku_name                    = "standard"
   }
   key2 = {
-    name                        = "keyvault002osslmo"
+    name                        = "keyvault002omka2"
     resource_group_name         = "rg-todo-002"
     location                    = "Central india"
     enabled_for_disk_encryption = "true"
@@ -152,25 +152,25 @@ keyvault = {
 
 secrets = {
   secret1 = {
-    key_name            = "keyvault001osslmo"
+    key_name            = "keyvault002omka1"
     resource_group_name = "rg-todo-001"
     secret_name         = "vm1"
     secret_value        = "Ali@1001"
   }
   secret2 = {
-    key_name            = "keyvault001osslmo"
+    key_name            = "keyvault002omka2"
     resource_group_name = "rg-todo-001"
     secret_name         = "password1"
     secret_value        = "Ali@1002"
   }
   secret3 = {
-    key_name            = "keyvault002osslmo"
+    key_name            = "keyvault002omka2"
     resource_group_name = "rg-todo-002"
     secret_name         = "vm2"
     secret_value        = "Ali@1003"
   }
   secret4 = {
-    key_name            = "keyvault002osslmo"
+    key_name            = "keyvault002omka2"
     resource_group_name = "rg-todo-002"
     secret_name         = "password2"
     secret_value        = "Ali@1004"
@@ -184,7 +184,7 @@ vms = {
     location            = "central india"
     size                = "Standard_D2s_v3"
     nic_name            = "nic-todo-001"
-    key_name            = "keyvault001osslmo"
+    key_name            = "keyvault002omka1"
     secret_name         = "vm1"
     secret_value        = "password1"
     os_disk = [
@@ -208,7 +208,7 @@ vms = {
     location            = "central india"
     size                = "Standard_D2s_v3"
     nic_name            = "nic-todo-002"
-    key_name            = "keyvault002osslmo"
+    key_name            = "keyvault002omka1"
     secret_name         = "vm2"
     secret_value        = "password2"
     os_disk = [
