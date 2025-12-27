@@ -175,9 +175,16 @@ stages:
         command: 'apply'
         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
         environmentServiceNameAzureRM: 'omkarsc' 
+- stage: Destroy
+  displayName: Destroy
+  jobs:
+  - job: TerraformApply
+    displayName: Terraform Apply
+    steps:
     - task: TerraformTask@5
       inputs:
         provider: 'azurerm'
         command: 'destroy'
         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
-        environmentServiceNameAzureRM: 'sc-azure-dev'
+        environmentServiceNameAzureRM: 'omkarsc'
+ 
