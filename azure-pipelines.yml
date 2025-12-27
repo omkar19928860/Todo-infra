@@ -178,8 +178,8 @@ stages:
 - stage: Destroy
   displayName: Destroy
   jobs:
-  - job: TerraformApply
-    displayName: Terraform Apply
+  - job: Terraformdestroy
+    displayName: Terraform Destroy
     steps:
     - task: TerraformTask@5
       inputs:
