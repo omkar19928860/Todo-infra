@@ -158,7 +158,7 @@ secrets = {
     secret_value        = "Ali@1001"
   }
   secret2 = {
-    key_name            = "keyvault002omka2"
+    key_name            = "keyvault002omka1"
     resource_group_name = "rg-todo-001"
     secret_name         = "password1"
     secret_value        = "Ali@1002"
@@ -208,7 +208,7 @@ vms = {
     location            = "central india"
     size                = "Standard_D2s_v3"
     nic_name            = "nic-todo-002"
-    key_name            = "keyvault002omka1"
+    key_name            = "keyvault002omka2"
     secret_name         = "vm2"
     secret_value        = "password2"
     os_disk = [
