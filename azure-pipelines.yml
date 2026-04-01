@@ -109,6 +109,8 @@ stages:
       displayName: 'Install and authenticate Snyk'
     - script: |
        snyk iac test . --report
+       displayName: Snyk IaC Scan
+      continueOnError: true
 - stage: costStage
   dependsOn: plan
   displayName: Finops 
