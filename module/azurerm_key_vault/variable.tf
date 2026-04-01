@@ -9,3 +9,5 @@ variable "keyvault" {
     sku_name                    = string
   }))
 }
+
+#omk
