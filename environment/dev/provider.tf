@@ -7,9 +7,9 @@ terraform {
   }
 
   backend "azurerm" {
-    resource_group_name  = "omkar"
-    storage_account_name = "omkarstor2"
-    container_name       = "omkarstorc"
+    resource_group_name  = "omkarrg"
+    storage_account_name = "omkarstor8860"
+    container_name       = "omkarc"
     key                  = "dev.terraform.tfstate"
   }
 }

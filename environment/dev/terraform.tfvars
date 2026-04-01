@@ -20,7 +20,7 @@ resource_group = {
 }
 storage_account = {
   stg1 = {
-    name                             = "todostaorage00omkjhgf7"
+    name                             = "todostaorage00o7"
     resource_group_name              = "rg-todo-001"
     location                         = "central india"
     account_tier                     = "Standard"
@@ -32,7 +32,7 @@ storage_account = {
     min_tls_version                  = "TLS1_0"
   }
   stg2 = {
-    name                     = "todostaorageomkjhg8"
+    name                     = "todostaorageomk8"
     resource_group_name      = "rg-todo-002"
     location                 = "central india"
     account_tier             = "Standard"
