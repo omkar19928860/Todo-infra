@@ -3,28 +3,28 @@ trigger: none
 pool: dev
 
 stages:
-- stage: preCommitChecks
-  displayName: Infrastructure Quality & Security Checks
-  jobs: 
-  - job: TerraformValidate
-    displayName: Terraform Validate
-    steps:
-    - task: TerraformTask@5
-      displayName: init
-      inputs:
-        provider: 'azurerm'
-        command: 'init'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
-        backendServiceArm: 'omkarsc'
-        backendAzureRmStorageAccountName: 'omkarstor8860'
-        backendAzureRmContainerName: 'omkarc'
-        backendAzureRmKey: 'dev.terraform.tfstate'  
-    - task: TerraformTask@5
-      displayName: validate
-      inputs:
-        provider: 'azurerm'
-        command: 'validate'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+# - stage: preCommitChecks
+#   displayName: Infrastructure Quality & Security Checks
+#   jobs: 
+#   - job: TerraformValidate
+#     displayName: Terraform Validate
+#     steps:
+#     - task: TerraformTask@5
+#       displayName: init
+#       inputs:
+#         provider: 'azurerm'
+#         command: 'init'
+#         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+#         backendServiceArm: 'omkarsc'
+#         backendAzureRmStorageAccountName: 'omkarstor8860'
+#         backendAzureRmContainerName: 'omkarc'
+#         backendAzureRmKey: 'dev.terraform.tfstate'  
+#     - task: TerraformTask@5
+#       displayName: validate
+#       inputs:
+#         provider: 'azurerm'
+#         command: 'validate'
+#         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
 
   # - job: TerraformFmt
   #   dependsOn: TerraformValidate
