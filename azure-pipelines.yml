@@ -1,9 +1,12 @@
 
 trigger: none 
 pool: dev
+variables:
+- group: omkarv
 
 stages:
-# - stage: preCommitChecks
+
+#- stage: preCommitChecks
 #   displayName: Infrastructure Quality & Security Checks
 #   jobs: 
 #   - job: TerraformValidate
@@ -80,6 +83,7 @@ stages:
         backendAzureRmStorageAccountName: 'omkarstor8860'
         backendAzureRmContainerName: 'omkarc'
         backendAzureRmKey: 'dev.terraform.tfstate'
+    
        
     - task: TerraformTask@5
       inputs:
@@ -88,11 +92,23 @@ stages:
         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
         environmentServiceNameAzureRM: 'omkarsc'
         commandOptions: '-out=tfplan'
+      displayName: 'Publish IaC report'
+      condition: succeededOrFailed()
     - task: PublishPipelineArtifact@1
       displayName: Publish tfplan
       inputs:
         targetPath: '$(System.DefaultWorkingDirectory)/environment/dev/tfplan'
         artifact: 'tfplan'
+    - task: NodeTool@0
+      inputs:
+        versionSource: 'spec'
+        versionSpec: '6.x'
+    - script: |
+       npm install -g snyk
+       snyk auth $(SNYK_TOKEN)
+      displayName: 'Install and authenticate Snyk'
+    - script: |
+       snyk iac test . --report
 - stage: costStage
   dependsOn: plan
   displayName: Finops 
