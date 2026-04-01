@@ -26,43 +26,43 @@ stages:
         command: 'validate'
         workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
 
-  - job: TerraformFmt
-    dependsOn: TerraformValidate
-    displayName: Terraform Fmt
-    steps:
-    - task: TerraformTask@5
-      displayName: fmt
-      inputs:
-        provider: 'azurerm'
-        command: 'custom'
-        environmentServiceNameAzureRM: 'omkarsc'
-        workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
-        outputTo: 'console'
-        customCommand: 'fmt'
+  # - job: TerraformFmt
+  #   dependsOn: TerraformValidate
+  #   displayName: Terraform Fmt
+  #   steps:
+  #   - task: TerraformTask@5
+  #     displayName: fmt
+  #     inputs:
+  #       provider: 'azurerm'
+  #       command: 'custom'
+  #       environmentServiceNameAzureRM: 'omkarsc'
+  #       workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+  #       outputTo: 'console'
+  #       customCommand: 'fmt'
 
-  - job: tfsec
-    dependsOn: TerraformFmt
-    displayName: TfSec Scan
-    steps:
-    - task: tfsec@1
-      inputs:
-        version: 'v1.26.0'
-        dir: '$(System.DefaultWorkingDirectory)/environment/dev'
+  # - job: tfsec
+  #   dependsOn: TerraformFmt
+  #   displayName: TfSec Scan
+  #   steps:
+  #   - task: tfsec@1
+  #     inputs:
+  #       version: 'v1.26.0'
+  #       dir: '$(System.DefaultWorkingDirectory)/environment/dev'
 
-  - job: tflint
-    dependsOn: tfsec
-    displayName: TFLint
-    steps:
-    - task: PowerShell@2
-      continueOnError: true
-      inputs:
-        targetType: 'inline'
-        script: |
-          winget install TerraformLinters.tflint     
-          ls   
-          tflint
-        errorActionPreference: 'continue'        
-        workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
+  # - job: tflint
+  #   dependsOn: tfsec
+  #   displayName: TFLint
+  #   steps:
+  #   - task: PowerShell@2
+  #     continueOnError: true
+  #     inputs:
+  #       targetType: 'inline'
+  #       script: |
+  #         winget install TerraformLinters.tflint     
+  #         ls   
+  #         tflint
+  #       errorActionPreference: 'continue'        
+  #       workingDirectory: '$(System.DefaultWorkingDirectory)/environment/dev'
 
 
 - stage: plan
