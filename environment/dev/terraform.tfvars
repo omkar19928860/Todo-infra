@@ -134,31 +134,31 @@ keyvault = {
     name                        = "keyvault001omka1"
     resource_group_name         = "rg-todo-001"
     location                    = "Central india"
-    enabled_for_disk_encryption = "true"
-    soft_delete_retention_days  = "7"
-    purge_protection_enabled    = "false"
+    enabled_for_disk_encryption = true
+    soft_delete_retention_days  = 7
+    purge_protection_enabled    = false
     sku_name                    = "standard"
   }
   key2 = {
     name                        = "keyvault002omka2"
     resource_group_name         = "rg-todo-002"
     location                    = "Central india"
-    enabled_for_disk_encryption = "true"
-    soft_delete_retention_days  = "7"
-    purge_protection_enabled    = "false"
+    enabled_for_disk_encryption = true
+    soft_delete_retention_days  = 7
+    purge_protection_enabled    = false
     sku_name                    = "standard"
   }
 }
 
 secrets = {
   secret1 = {
-    key_name            = "keyvault002omka1"
+    key_name            = "keyvault001omka1"
     resource_group_name = "rg-todo-001"
     secret_name         = "vm1"
     secret_value        = "Ali@1001"
   }
   secret2 = {
-    key_name            = "keyvault002omka1"
+    key_name            = "keyvault001omka1"
     resource_group_name = "rg-todo-001"
     secret_name         = "password1"
     secret_value        = "Ali@1002"
@@ -184,7 +184,7 @@ vms = {
     location            = "central india"
     size                = "Standard_D2s_v3"
     nic_name            = "nic-todo-001"
-    key_name            = "keyvault002omka1"
+    key_name            = "keyvault001omka1"
     secret_name         = "vm1"
     secret_value        = "password1"
     os_disk = [
